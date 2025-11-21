@@ -1,0 +1,48 @@
+activityDiagram
+    title ORDER Command Flow
+
+    %% Swimlanes
+    |Customer|: ORDER Command Received;
+    |Customer|: Provide customerID and password;
+    
+    |MyBazaarSystem|: Verify Customer Exists & Password Valid;
+    
+    if (Invalid Password/Customer DNE) then (Error)
+        |MyBazaarSystem|->|Customer|: Error Message: "Invalid password." / "No customer with ID..."[cite: 261, 300];
+        end
+    endif
+    
+    |MyBazaarSystem|: Check Shopping Cart;
+    if (Empty) then (Error)
+        |MyBazaarSystem|->|Customer|: "You should add some items to your cart..."[cite: 300];
+        end
+    endif
+    
+    |MyBazaarSystem|: Calculate Initial Cost;
+    
+    fork
+        |MyBazaarSystem|: Apply Active Campaign Discounts (max 50%)[cite: 295, 131];
+    fork again
+        |MyBazaarSystem|: Apply Customer Status Discount (10% or 15%)[cite: 294, 69, 70];
+    end fork
+    
+    |MyBazaarSystem|: Determine Final Total Cost;
+    
+    |MyBazaarSystem|: Check Customer Balance;
+    if (Insufficient Funds) then (Error)
+        |MyBazaarSystem|->|Customer|: "Order could not be placed. Insufficient funds."[cite: 300];
+        end
+    endif
+    
+    |MyBazaarSystem|: Record Order & Debit Balance;
+    
+    fork
+        |MyBazaarSystem|: Update Stock Amount of Purchased Items[cite: 84, 440];
+    fork again
+        |MyBazaarSystem|: Update Customer Status (If limits met)[cite: 83, 440];
+    end fork
+    
+    |MyBazaarSystem|->|Customer|: Success Message: "Done! Your order will be delivered..."[cite: 300];
+    |MyBazaarSystem|->|Customer|: Display Status Upgrade Info ("You need to spend XXX more..." or "Congratulations!")[cite: 297, 300, 440];
+    
+    end
