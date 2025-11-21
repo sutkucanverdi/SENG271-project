@@ -1,0 +1,68 @@
+flowchart LR
+  subgraph Actors
+    C[Customer]
+    A[Admin]
+    T[Technician]
+  end
+
+  subgraph UseCases
+    viewPersonal["Display Personal Data"]
+    changePass["Change Password"]
+    deposit["Deposit Money"]
+    viewCampaigns["View Active Campaigns"]
+    addToCart["Add Item to Cart"]
+    emptyCart["Empty Cart"]
+    placeOrder["Place Order"]
+    addCustomer["Add Customer"]
+    addEmployee["Add Admin/Technician"]
+    showCustomerInfo["Show Customer Info"]
+    showCustomers["List Customers"]
+    showAdminInfo["Show Admin Info"]
+    createCampaign["Create Campaign"]
+    listItems["List Items"]
+    showItemsLow["Show Items Low On Stock"]
+    showVIP["Show VIP Customers"]
+    addItem["Add New Item"]
+    showOrders["Show Orders (senior tech)"]
+    dispItemInfo["Display Item Info"]
+    dispItemsOf["Display Items of Types"]
+  end
+
+  %% Links: all users
+  C --> viewPersonal
+  A --> viewPersonal
+  T --> viewPersonal
+
+  %% Customer actions
+  C --> changePass
+  C --> deposit
+  C --> viewCampaigns
+  C --> addToCart
+  C --> emptyCart
+  C --> placeOrder
+
+  %% Admin actions
+  A --> addCustomer
+  A --> addEmployee
+  A --> showCustomerInfo
+  A --> showCustomers
+  A --> showAdminInfo
+  A --> createCampaign
+  A --> listItems
+  A --> showItemsLow
+  A --> showVIP
+
+  %% Technician actions
+  T --> listItems
+  T --> showItemsLow
+  T --> showVIP
+  T --> addItem
+  T --> showOrders
+  T --> dispItemInfo
+  T --> dispItemsOf
+
+  %% Shared / relationships hints (visual guidance)
+  addToCart ---|checks stock| showItemsLow
+  createCampaign ---|rate & type checks| viewCampaigns
+  placeOrder ---|uses| addToCart
+  placeOrder ---|creates| showOrders
