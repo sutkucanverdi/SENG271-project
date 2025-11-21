@@ -1,0 +1,24 @@
+flowchart TD
+  Start([Start])
+  CheckCustomer{Customer exists?}
+  VerifyPass{Password correct?}
+  CartEmpty{Cart empty?}
+  ComputeTotal[Calculate item prices\n(apply campaign discounts per-item)\napply customer status discount]
+  CheckBalance{Balance sufficient?}
+  Deduct[Deduct balance\nCreate Order\nUpdate stock\nUpdate customer status]
+  Feedback[Show success message\nShow amount to next status]
+  FailPass[Show "Invalid password"]
+  FailCart[Show "You should add items to cart"]
+  FailBalance[Show "Insufficient funds"]
+
+  End([End])
+
+  Start --> CheckCustomer
+  CheckCustomer -- No --> End
+  CheckCustomer -- Yes --> VerifyPass
+  VerifyPass -- No --> FailPass --> End
+  VerifyPass -- Yes --> CartEmpty
+  CartEmpty -- Yes --> FailCart --> End
+  CartEmpty -- No --> ComputeTotal --> CheckBalance
+  CheckBalance -- No --> FailBalance --> End
+  CheckBalance -- Yes --> Deduct --> Feedback --> End
