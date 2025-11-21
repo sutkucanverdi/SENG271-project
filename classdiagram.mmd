@@ -1,0 +1,137 @@
+classDiagram
+  class Person {
+    +String name
+    +String email
+    +Date dateOfBirth
+    +displayPersonalData()
+  }
+
+  class Employee {
+    +double salary
+  }
+  Person <|-- Employee
+
+  class Admin {
+    +String password
+    +addCustomer(...)
+    +addAdmin(...)
+    +addTech(...)
+    +createCampaign(...)
+    +showCustomerInfo(...)
+    +showCustomers()
+    +showAdminInfo()
+  }
+  Employee <|-- Admin
+
+  class Technician {
+    +boolean isSenior
+    +addItem(...)
+    +displayItemInfo(...)
+    +showOrders()  <<seniorOnly>>
+  }
+  Employee <|-- Technician
+
+  class Customer {
+    +int customerID
+    +String password
+    +double balance
+    +Status status
+    +ShoppingCart cart
+    +List~Order~ orderHistory
+    +changePassword(oldP,newP)
+    +depositMoney(amount)
+    +addToCart(itemID)
+    +emptyCart()
+    +placeOrder(password)
+    +toString()
+    -- static --
+    +static double SILVER_LIMIT
+    +static double GOLDEN_LIMIT
+    +static double SILVER_DISCOUNT
+    +static double GOLDEN_DISCOUNT
+  }
+  Person <|-- Customer
+
+  class Item {
+    +int itemID
+    +double price
+    +int stock
+    +String type
+    +getPriceAfterCampaign(campaign)
+  }
+
+  class Cosmetic
+  class Electronic
+  class OfficeSupply
+
+  Item <|-- Cosmetic
+  Item <|-- Electronic
+  Item <|-- OfficeSupply
+
+  %% Cosmetic subclasses
+  class Perfume
+  class HairCare
+  class SkinCare
+  Cosmetic <|-- Perfume
+  Cosmetic <|-- HairCare
+  Cosmetic <|-- SkinCare
+
+  %% Electronic subclasses
+  class Computer
+  class TV
+  class SmartPhone
+  Electronic <|-- Computer
+  Electronic <|-- TV
+  Electronic <|-- SmartPhone
+
+  class Desktop
+  class Laptop
+  class Tablet
+  Computer <|-- Desktop
+  Computer <|-- Laptop
+  Computer <|-- Tablet
+
+  %% Office supply subclasses
+  class Book
+  class CDDVD
+  OfficeSupply <|-- Book
+  OfficeSupply <|-- CDDVD
+
+  class ShoppingCart {
+    +List~Item~ items
+    +addItem(Item)
+    +clear()
+    +getTotal()
+  }
+
+  class Order {
+    +Date orderDate
+    +double totalCost
+    +List~Item~ purchasedItems
+    +int customerID
+  }
+
+  class Campaign {
+    +Date startDate
+    +Date endDate
+    +String itemType
+    +double discountRate
+  }
+
+  class MyBazaar {
+    +List~User~ users
+    +List~Item~ items
+    +List~Campaign~ campaigns
+    +processCommand(...)
+    +findUser(...)
+    +findItem(...)
+  }
+
+  %% Associations
+  Customer "1" o-- "1" ShoppingCart : has
+  Customer "1" o-- "*" Order : orderHistory
+  Order "*" o-- "*" Item : contains
+  MyBazaar "1" o-- "*" Customer
+  MyBazaar "1" o-- "*" Employee
+  MyBazaar "1" o-- "*" Item
+  MyBazaar "1" o-- "*" Campaign
