@@ -1,19 +1,23 @@
 flowchart TD
-  Start([Start])
-  CheckAdmin{Admin exists?}
-  CheckRate{Rate <= 50%?}
-  CheckExists{Campaign for itemType exists?}
-  Create[Create campaign\nAdd to active campaigns]
-  FailAdmin[Show "No admin named X exists"]
-  FailRate[Show "Discount rate exceeds maximum rate"]
-  FailExists[Show "Campaign already exists for that type"]
+    Start([Start])
 
-  End([End])
+    CheckAdmin{Admin exists?}
+    CheckRate{Rate ≤ 50%?}
+    CheckExists{Campaign already exists?}
 
-  Start --> CheckAdmin
-  CheckAdmin -- No --> FailAdmin --> End
-  CheckAdmin -- Yes --> CheckRate
-  CheckRate -- No --> FailRate --> End
-  CheckRate -- Yes --> CheckExists
-  CheckExists -- Yes --> FailExists --> End
-  CheckExists -- No --> Create --> End
+    Create[Create campaign]
+    FailAdmin[Admin not found]
+    FailRate[Rate too high]
+    FailExists[Campaign exists]
+
+    End([End])
+
+    Start --> CheckAdmin
+    CheckAdmin -->|No| FailAdmin --> End
+    CheckAdmin -->|Yes| CheckRate
+
+    CheckRate -->|No| FailRate --> End
+    CheckRate -->|Yes| CheckExists
+
+    CheckExists -->|Yes| FailExists --> End
+    CheckExists -->|No| Create --> End
