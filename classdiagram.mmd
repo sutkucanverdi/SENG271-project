@@ -20,6 +20,9 @@ classDiagram
     +showCustomerInfo(...)
     +showCustomers()
     +showAdminInfo()
+    +listItems()
+    +showItemsLowOnStock(maxStock)
+    +showVIPCustomers()
   }
   Employee <|-- Admin
 
@@ -27,7 +30,10 @@ classDiagram
     +boolean isSenior
     +addItem(...)
     +displayItemInfo(...)
-    +showOrders()  <<seniorOnly>>
+    +showOrders()
+    +listItems()
+    +showItemsLowOnStock(maxStock)
+    +showVIPCustomers()
   }
   Employee <|-- Technician
 
@@ -43,6 +49,7 @@ classDiagram
     +addToCart(itemID)
     +emptyCart()
     +placeOrder(password)
+    +viewActiveCampaigns()
     +toString()
     -- static --
     +static double SILVER_LIMIT
@@ -60,40 +67,82 @@ classDiagram
     +getPriceAfterCampaign(campaign)
   }
 
-  class Cosmetic
-  class Electronic
-  class OfficeSupply
+  class Cosmetic {
+    +String manufacturer
+    +String brand
+    +boolean isOrganic
+    +int expirationYear
+    +double weight
+  }
+  class Electronic {
+    +String manufacturer
+    +String brand
+    +int maxVolt
+    +int maxWatt
+  }
+  class OfficeSupply {
+    +int releaseDate
+    +String coverTitle
+  }
 
   Item <|-- Cosmetic
   Item <|-- Electronic
   Item <|-- OfficeSupply
 
   %% Cosmetic subclasses
-  class Perfume
-  class HairCare
-  class SkinCare
+  class Perfume {
+    +int lastingDuration
+  }
+  class HairCare {
+    +boolean isMedicated
+  }
+  class SkinCare {
+    +boolean babySensitive
+  }
   Cosmetic <|-- Perfume
   Cosmetic <|-- HairCare
   Cosmetic <|-- SkinCare
 
   %% Electronic subclasses
-  class Computer
-  class TV
-  class SmartPhone
+  class Computer {
+    +String operatingSystem
+    +String CPUType
+    +int ramCapacity
+    +int HDDCapacity
+  }
+  class TV {
+    +int screenSize
+  }
+  class SmartPhone {
+    +String screenType
+  }
   Electronic <|-- Computer
   Electronic <|-- TV
   Electronic <|-- SmartPhone
 
-  class Desktop
-  class Laptop
-  class Tablet
+  class Desktop {
+    +String boxColor
+  }
+  class Laptop {
+    +boolean hasHDMI
+  }
+  class Tablet {
+    +String dimensions
+  }
   Computer <|-- Desktop
   Computer <|-- Laptop
   Computer <|-- Tablet
 
   %% Office supply subclasses
-  class Book
-  class CDDVD
+  class Book {
+    +String publisher
+    +List~String~ authors
+    +int pageNumber
+  }
+  class CDDVD {
+    +String composer
+    +List~String~ songs
+  }
   OfficeSupply <|-- Book
   OfficeSupply <|-- CDDVD
 
@@ -116,22 +165,29 @@ classDiagram
     +Date endDate
     +String itemType
     +double discountRate
+    +static double MAX_DISCOUNT_RATE
   }
 
   class MyBazaar {
-    +List~User~ users
+    +List~Person~ users
     +List~Item~ items
     +List~Campaign~ campaigns
+    +List~Order~ orders
     +processCommand(...)
     +findUser(...)
     +findItem(...)
+    +listItems()
+    +showItemsLowOnStock(maxStock)
+    +showVIPCustomers()
+    +showCampaignsForCustomer(customerID)
+    +showAllOrders()
   }
 
   %% Associations
   Customer "1" o-- "1" ShoppingCart : has
   Customer "1" o-- "*" Order : orderHistory
   Order "*" o-- "*" Item : contains
-  MyBazaar "1" o-- "*" Customer
-  MyBazaar "1" o-- "*" Employee
-  MyBazaar "1" o-- "*" Item
-  MyBazaar "1" o-- "*" Campaign
+  MyBazaar "1" o-- "*" Person : users
+  MyBazaar "1" o-- "*" Item : items
+  MyBazaar "1" o-- "*" Campaign : campaigns
+  MyBazaar "1" o-- "*" Order : orders
