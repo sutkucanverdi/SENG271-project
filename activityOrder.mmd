@@ -6,10 +6,11 @@ flowchart TD
 
     VerifyPass{Password correct?}
     CartEmpty{Cart empty?}
-    ComputeTotal[Calculate total price\nApply discounts]
+    ComputeTotal[Calculate total price
+Apply discounts]
     CheckBalance{Balance sufficient?}
 
-    Deduct[Deduct balance\nCreate order\nUpdate stock\nUpdate status]
+    Deduct[Deduct balance\\Create order\\Update stock\\Update status]
     Feedback[Show success message]
 
     FailPass[Invalid password]
