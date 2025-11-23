@@ -2,6 +2,8 @@ flowchart TD
     Start([Start])
 
     CheckCustomer{Customer exists?}
+    FailCustomer[Error meesage: No customer found]
+
     VerifyPass{Password correct?}
     CartEmpty{Cart empty?}
     ComputeTotal[Calculate total price\nApply discounts]
@@ -17,7 +19,7 @@ flowchart TD
     End([End])
 
     Start --> CheckCustomer
-    CheckCustomer -->|No| End
+    CheckCustomer -->|No| FailCustomer --> End
     CheckCustomer -->|Yes| VerifyPass
 
     VerifyPass -->|No| FailPass --> End
