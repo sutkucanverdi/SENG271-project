@@ -28,7 +28,7 @@ flowchart LR
     dispItemsOf["Display Items of Types"]
   end
 
-  %% Links: all users
+  %% All users can display their own personal data
   C --> viewPersonal
   A --> viewPersonal
   T --> viewPersonal
@@ -60,9 +60,3 @@ flowchart LR
   T --> showOrders
   T --> dispItemInfo
   T --> dispItemsOf
-
-  %% Shared / relationships hints (visual guidance)
-  addToCart ---|checks stock| showItemsLow
-  createCampaign ---|rate & type checks| viewCampaigns
-  placeOrder ---|uses| addToCart
-  placeOrder ---|creates| showOrders
