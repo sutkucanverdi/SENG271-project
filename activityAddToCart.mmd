@@ -2,17 +2,20 @@ flowchart TD
     Start([Start])
 
     CheckCustomer{Customer exists?}
+    FailCustomer[Error message: No customer with given ID]
+
     CheckItem{Valid item ID?}
     CheckStock{Stock > 0?}
 
-    AddToCart[Add item to cart\nShow confirmation]
+    AddToCart[Add item to cart 
+Show confirmation]
     FailItem[Invalid item ID]
-    FailStock[Out of stock]
+    FailStock[Error message: Item temporarily unavailable]
 
     End([End])
 
     Start --> CheckCustomer
-    CheckCustomer -->|No| End
+    CheckCustomer -->|No| FailCustomer --> End
     CheckCustomer -->|Yes| CheckItem
 
     CheckItem -->|No| FailItem --> End
